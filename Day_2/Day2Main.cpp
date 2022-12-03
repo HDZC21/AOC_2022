@@ -10,8 +10,8 @@ const int LOSE = 0;
 const int DRAW = 3;
 const int WIN = 6;
 
-int convertChoiceToInt(char playedHand);
-int scoreRound(int userPlay, int opponentPlay);
+int ConvertChoiceToInt(char playedHand);
+int ScoreRound(int userPlay, int opponentPlay);
 
 int main()
 {
@@ -28,7 +28,7 @@ int main()
       char opponentPlay = currentLine[0];
       char userPlay = currentLine[2];
 
-      totalScore += scoreRound(convertChoiceToInt(userPlay), convertChoiceToInt(opponentPlay));
+      totalScore += ScoreRound(ConvertChoiceToInt(userPlay), ConvertChoiceToInt(opponentPlay));
     }
   }
   inputFile.close();
@@ -36,7 +36,7 @@ int main()
   std::cout << "Player Score = " << totalScore << std::endl;
 }
 
-int convertChoiceToInt(char playedHand)
+int ConvertChoiceToInt(char playedHand)
 {
   if ((playedHand == 'A') || (playedHand == 'X'))
   {
@@ -52,7 +52,7 @@ int convertChoiceToInt(char playedHand)
   }
 }
 
-int scoreRound(int userPlay, int opponentPlay)
+int ScoreRound(int userPlay, int opponentPlay)
 {
   if (userPlay == opponentPlay)
   {
