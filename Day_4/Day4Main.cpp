@@ -13,7 +13,7 @@ int main()
   std::string currentLine;
 
   int sumOfDuplicateRanges = 0;
-  int sumofRangeOverlap = 0;
+  int sumOfRangeOverlap = 0;
 
   if (inputFile.is_open()) 
   {
@@ -32,13 +32,13 @@ int main()
       secondElf.second = std::stoi(secondRange.substr(secondRange.find('-') + 1, std::string::npos));
 
       sumOfDuplicateRanges += DetermineRangeContainment(firstElf, secondElf);
-      sumofRangeOverlap += DetermineRangeOverlap(firstElf, secondElf);
+      sumOfRangeOverlap += DetermineRangeOverlap(firstElf, secondElf);
     }
   }
   inputFile.close();
 
   std::cout << "Sum Of Fully Contained Ranges = " << sumOfDuplicateRanges << std::endl;
-  std::cout << "Sum Of Overlapping Ranges = " << sumofRangeOverlap << std::endl;
+  std::cout << "Sum Of Overlapping Ranges = " << sumOfRangeOverlap << std::endl;
 }
 
 int DetermineRangeContainment(std::pair<int, int> &elf1, std::pair<int, int> &elf2)

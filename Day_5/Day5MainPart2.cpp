@@ -11,9 +11,9 @@ struct Instruction_t
   int to;
 };
 
-void GenerateStacks(std::vector<std::string> &rawMap, std::vector<std::stack<char>> &stacks);
-void ExecuteInstruction(std::vector<std::stack<char>> &stacks, Instruction_t &instruction);
-std::string GenerateOutput(std::vector<std::stack<char>> &stacks);
+void GenerateVectorMap(std::vector<std::string> &rawMap, std::vector<std::vector<char>> &vectorMap);
+void ExecuteInstruction(std::vector<std::vector<char>> &vectorMap, Instruction_t &instruction);
+std::string GenerateOutput(std::vector<std::vector<char>> &vectorMap);
 
 int main()
 {
@@ -23,7 +23,7 @@ int main()
   std::string currentLine;
 
   std::vector<std::string> rawMap;
-  std::vector<std::stack<char>> stackMap (9);
+  std::vector<std::vector<char>> vectorMap (9);
   Instruction_t currentInstruction;
   std::string finalOutput;
 
@@ -43,7 +43,7 @@ int main()
       }
     }
 
-    GenerateStacks(rawMap, stackMap);
+    GenerateVectorMap(rawMap, vectorMap);
 
     // Start reading moves
     while(getline(inputFile, currentLine))
@@ -65,10 +65,10 @@ int main()
       tempLine = currentLine.substr(currentLine.size() - 1, 1);
       currentInstruction.to = (std::stoi(tempLine) - 1);
 
-      ExecuteInstruction(stackMap, currentInstruction);
+      ExecuteInstruction(vectorMap, currentInstruction);
     }
 
-    finalOutput = GenerateOutput(stackMap);
+    finalOutput = GenerateOutput(vectorMap);
   }
 
   inputFile.close();
@@ -76,7 +76,7 @@ int main()
   std::cout << "Final Stack State = " << finalOutput << std::endl;
 }
 
-void GenerateStacks(std::vector<std::string> &rawMap, std::vector<std::stack<char>> &stacks)
+void GenerateVectorMap(std::vector<std::string> &rawMap, std::vector<std::vector<char>> &vectorMap)
 {
   int mapIdx = 1;
   int idxOffset = 4;
@@ -84,12 +84,12 @@ void GenerateStacks(std::vector<std::string> &rawMap, std::vector<std::stack<cha
   // Read the map bottom-up so stack push works correctly
   for (int i = rawMap.size() - 1; i >= 0; i--)
   {
-    // Nine total stacks
+    // Nine total crate stacks
     for (int j = 0; j < 9; j++)
     {
       if (rawMap.at(i).at(mapIdx) != ' ')
       {
-        stacks.at(j).push(rawMap.at(i).at(mapIdx));
+        vectorMap.at(j).push_back(rawMap.at(i).at(mapIdx));
       }
 
       mapIdx += idxOffset;
@@ -99,24 +99,26 @@ void GenerateStacks(std::vector<std::string> &rawMap, std::vector<std::stack<cha
   }
 }
 
-void ExecuteInstruction(std::vector<std::stack<char>> &stacks, Instruction_t &instruction)
+void ExecuteInstruction(std::vector<std::vector<char>> &vectorMap, Instruction_t &instruction)
 {
   char workingVal;
+  int startingIdx = (vectorMap.at(instruction.from).size()) - instruction.numToMove;
+  std::cout << "StartingIdx: " << startingIdx << std::endl;
 
-  for (int i = 0; i < instruction.numToMove; i++)
+  for (int i = startingIdx; i < vectorMap.at(instruction.from).size(); i++)
   {
-    workingVal = stacks.at(instruction.from).top();
-    stacks.at(instruction.from).pop();
-    stacks.at(instruction.to).push(workingVal);
+    vectorMap.at(instruction.to).push_back(vectorMap.at(instruction.from).at(i));
   }
+
+  vectorMap.at(instruction.from).erase(vectorMap.at(instruction.from).begin() + startingIdx, vectorMap.at(instruction.from).end());
 }
 
-std::string GenerateOutput(std::vector<std::stack<char>> &stacks)
+std::string GenerateOutput(std::vector<std::vector<char>> &vectorMap)
 {
   std::string outputBuild = "";
-  for (int i = 0; i < stacks.size(); i++)
+  for (int i = 0; i < vectorMap.size(); i++)
   {
-    outputBuild += stacks.at(i).top();
+    outputBuild += vectorMap.at(i).back();
   }
 
   return outputBuild;
