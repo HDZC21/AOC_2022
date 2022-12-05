@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <set>
+#include <algorithm>
 
 int CalculateAddedScore(char input);
 
@@ -14,6 +16,7 @@ int main()
 
   std::set<char> firstHalfSet;
   std::set<char> secondHalfSet;
+  std::vector<char> intersectOutput;
 
   int sumOfPriorities = 0;
 
@@ -29,25 +32,21 @@ int main()
         firstHalfSet.insert(firstHalf.at(i));
       }
 
-      std::pair<std::set<char>::iterator, bool> insertFirstHalfResult;
-      std::pair<std::set<char>::iterator, bool> insertSecondHalfResult;
-
       for (int i = 0; i < secondHalf.length(); i++)
       {
-        char charToAdd = secondHalf.at(i);
-        insertFirstHalfResult = firstHalfSet.insert(charToAdd);
-        insertSecondHalfResult = secondHalfSet.insert(charToAdd);
+        secondHalfSet.insert(secondHalf.at(i));
+      }
 
-        if ((insertFirstHalfResult.second == false) &&
-            (insertSecondHalfResult.second == true))
-        {
-          sumOfPriorities += CalculateAddedScore(charToAdd);
-          break;
-        }
+      std::set_intersection(firstHalfSet.begin(), firstHalfSet.end(), secondHalfSet.begin(), secondHalfSet.end(), std::inserter(intersectOutput, intersectOutput.begin()));
+
+      if (intersectOutput.size() != 0)
+      {
+        sumOfPriorities += CalculateAddedScore(intersectOutput.at(0));
       }
 
       firstHalfSet.clear();
       secondHalfSet.clear();
+      intersectOutput.clear();
     }
   }
   inputFile.close();
