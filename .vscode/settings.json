@@ -49,6 +49,9 @@
     "set": "cpp",
     "xtree": "cpp",
     "deque": "cpp",
-    "stack": "cpp"
+    "stack": "cpp",
+    "list": "cpp",
+    "unordered_set": "cpp",
+    "xhash": "cpp"
   }
 }
