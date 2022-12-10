@@ -42,7 +42,6 @@ int main()
   inputFile.open("input.txt");
   
   std::string currentLine;
-
   
   std::vector<Coordinate_t> knots (10);
 
